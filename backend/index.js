@@ -15,5 +15,15 @@ app.post("/signup", async (req,rsp)=>{
     rsp.send(result)
 })
 
+app.post("/login",async (req,rsp)=>{
+    let user = await User.findOne(req.body).select("-password")
+    if(!user){
+        rsp.send({"Result":"No User Found"})
+        return
+    }
+
+    rsp.send(user)
+})
+
 
 app.listen(5000);
