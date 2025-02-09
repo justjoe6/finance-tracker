@@ -1,6 +1,7 @@
 const express = require("express");
 require("./db/config.js");
 const User = require("./db/user");
+const Spending = require("./db/spending.js")
 const app = express();
 const cors = require("cors")
 
@@ -23,6 +24,12 @@ app.post("/login",async (req,rsp)=>{
     }
 
     rsp.send(user)
+})
+
+app.post("/add-spend",async (req,rsp)=>{
+    let spending = new Spending(req.body)
+    result = await spending.save()
+    rsp.send(result.toObject())
 })
 
 
