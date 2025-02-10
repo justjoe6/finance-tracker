@@ -32,5 +32,15 @@ app.post("/add-spend",async (req,rsp)=>{
     rsp.send(result.toObject())
 })
 
+app.get("/spendings/:year/:month/:id", async (req,rsp)=>{
+
+    let result = await Spending.find({
+        year: req.params.year,       
+        month: req.params.month,     
+        userId: req.params.id   
+      })    
+      rsp.send(result)
+})
+
 
 app.listen(5000);
