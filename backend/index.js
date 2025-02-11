@@ -2,6 +2,8 @@ const express = require("express");
 require("./db/config.js");
 const User = require("./db/user");
 const Spending = require("./db/spending.js")
+const SpendingMonthly = require("./db/monthly.js")
+const SpendingAnnually = require("./db/annually.js")
 const app = express();
 const cors = require("cors")
 
@@ -32,6 +34,19 @@ app.post("/add-spend",async (req,rsp)=>{
     rsp.send(result.toObject())
 })
 
+app.post("/add-monthly",async (req,rsp)=>{
+    let monthlySpend = new SpendingMonthly(req.body)
+    result = await monthlySpend.save()
+    console.log(result)
+    rsp.send(result.toObject())
+})
+
+app.post("/add-annually",async (req,rsp)=>{
+    let annualSpend = new SpendingAnnually(req.body)
+    result = await annualSpend.save()
+    rsp.send(result.toObject())
+})
+
 app.get("/spendings/:year/:month/:id", async (req,rsp)=>{
 
     let result = await Spending.find({
@@ -41,6 +56,34 @@ app.get("/spendings/:year/:month/:id", async (req,rsp)=>{
       })    
       rsp.send(result)
 })
+app.get("/monthlyspendings/:id/:month/:year", async (req,rsp)=>{
+    let result = await SpendingMonthly.find({userId:req.params.id, removed: { $not: {
+        $elemMatch: { $eq: [[req.params.month, req.params.year]] } 
+    } }})
+    rsp.send(result)
+})
+app.get("/annualspendings/:id/:year", async (req,rsp)=>{
+    let result = await SpendingAnnually.find({userId:req.params.id,removed: { $nin: [req.params.year] }})
+    rsp.send(result)
+})
 
+app.delete("/deletespending/:id",async (req,rsp)=>{
+    let id = req.params.id
+    let result = await Spending.deleteOne({_id:id})
+    rsp.send(result)
+})
+
+app.put("/updatemonthly/:id/:month/:year",async (req,rsp)=>{
+    let result = await SpendingMonthly.updateOne({_id:req.params.id},{
+        $push:{removed:[[req.params.month,req.params.year]]}
+    })
+    rsp.send(result)
+})
+app.put("/updateannual/:id/:year",async (req,rsp)=>{
+    let result = await SpendingAnnually.updateOne({_id:req.params.id},{
+        $push:{removed:[req.params.year]}
+    })
+    rsp.send(result)
+})
 
 app.listen(5000);
