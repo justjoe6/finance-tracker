@@ -60,11 +60,21 @@ app.get("/monthlyspendings/:id/:month/:year", async (req,rsp)=>{
     let result = await SpendingMonthly.find({userId:req.params.id, removed: { $not: {
         $elemMatch: { $eq: [[req.params.month, req.params.year]] } 
     } }})
+    const filteredResult = result.filter((doc) => {
+        return (doc.year <= parseInt(req.params.year) && doc.month <= parseInt(req.params.month))
+    });
+    rsp.send(filteredResult)
+})
+app.get("/monthlyspendings/:id", async (req,rsp)=>{
+    let result = await SpendingMonthly.find({userId:req.params.id})
     rsp.send(result)
 })
 app.get("/annualspendings/:id/:year", async (req,rsp)=>{
     let result = await SpendingAnnually.find({userId:req.params.id,removed: { $nin: [req.params.year] }})
-    rsp.send(result)
+    const filteredResult = result.filter((doc) => {
+        return (doc.year <= parseInt(req.params.year))
+    });
+    rsp.send(filteredResult)
 })
 
 app.delete("/deletespending/:id",async (req,rsp)=>{
@@ -83,6 +93,23 @@ app.put("/updateannual/:id/:year",async (req,rsp)=>{
     let result = await SpendingAnnually.updateOne({_id:req.params.id},{
         $push:{removed:[req.params.year]}
     })
+    rsp.send(result)
+})
+
+app.delete("/deletesmonthlypending/:id",async (req,rsp)=>{
+    let id = req.params.id
+    let result = await SpendingMonthly.deleteOne({_id:id})
+    rsp.send(result)
+})
+
+app.get("/annualspendings/:id", async (req,rsp)=>{
+    let result = await SpendingAnnually.find({userId:req.params.id})
+    rsp.send(result)
+})
+
+app.delete("/deleteannualspending/:id",async (req,rsp)=>{
+    let id = req.params.id
+    let result = await SpendingAnnually.deleteOne({_id:id})
     rsp.send(result)
 })
 
