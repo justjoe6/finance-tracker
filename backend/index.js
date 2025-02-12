@@ -61,18 +61,18 @@ app.get("/monthlyspendings/:id/:month/:year", async (req,rsp)=>{
         $elemMatch: { $eq: [[req.params.month, req.params.year]] } 
     } }})
     const filteredResult = result.filter((doc) => {
-        return (doc.year <= parseInt(req.params.year) && doc.month <= parseInt(req.params.month))
+        return (doc.year <= parseInt(req.params.year) && doc.month <= parseInt(req.params.month) && (doc.permaRemoveMonth===-1 || (doc.permaRemoveMonth!==-1 && parseInt(req.params.year) <= doc.permaRemoveYear && parseInt(req.params.month) < doc.permaRemoveMonth)))
     });
     rsp.send(filteredResult)
 })
 app.get("/monthlyspendings/:id", async (req,rsp)=>{
-    let result = await SpendingMonthly.find({userId:req.params.id})
+    let result = await SpendingMonthly.find({userId:req.params.id,permaRemoveMonth:-1,permaRemoveYear:-1})
     rsp.send(result)
 })
 app.get("/annualspendings/:id/:year", async (req,rsp)=>{
     let result = await SpendingAnnually.find({userId:req.params.id,removed: { $nin: [req.params.year] }})
     const filteredResult = result.filter((doc) => {
-        return (doc.year <= parseInt(req.params.year))
+        return (doc.year <= parseInt(req.params.year) && (doc.permaRemoveYear===1 || (doc.permaRemoveYear !== -1 && parseInt(req.params.year) < doc.permaRemoveYear)) )
     });
     rsp.send(filteredResult)
 })
@@ -96,21 +96,49 @@ app.put("/updateannual/:id/:year",async (req,rsp)=>{
     rsp.send(result)
 })
 
-app.delete("/deletesmonthlypending/:id",async (req,rsp)=>{
+app.put("/deletesmonthlypending/:id/:month/:year",async (req,rsp)=>{
     let id = req.params.id
-    let result = await SpendingMonthly.deleteOne({_id:id})
+    let permaRemoveMonth = parseInt(req.params.month)
+    let permaRemoveYear = parseInt(req.params.year)
+    let result = await SpendingMonthly.updateOne({_id:id},{
+        $set:{permaRemoveMonth,permaRemoveYear}
+    })
     rsp.send(result)
 })
 
 app.get("/annualspendings/:id", async (req,rsp)=>{
-    let result = await SpendingAnnually.find({userId:req.params.id})
+    let result = await SpendingAnnually.find({userId:req.params.id,permaRemoveYear:-1})
     rsp.send(result)
 })
 
-app.delete("/deleteannualspending/:id",async (req,rsp)=>{
+app.put("/deleteannualspending/:id/:year",async (req,rsp)=>{
     let id = req.params.id
-    let result = await SpendingAnnually.deleteOne({_id:id})
+    let permaRemoveYear = parseInt(req.params.year)
+    let result = await SpendingAnnually.updateOne({_id:id},{
+        $set : {permaRemoveYear}
+    })
     rsp.send(result)
+})
+
+app.put("/updatepassword/:id",async (req,rsp)=>{
+    let result = await User.updateOne({_id:req.params.id},{
+        $set:req.body
+    })
+    if(!result){
+        rsp.send({result:"Error updating password"})
+        return
+    }
+    rsp.send({result:"Updated password"})
+})
+app.put("/updateusername/:id",async (req,rsp)=>{
+    let result = await User.updateOne({_id:req.params.id},{
+        $set:req.body
+    })
+    if(!result){
+        rsp.send({result:"Error updating username"})
+        return
+    }
+    rsp.send({result:"Updated username"})
 })
 
 app.listen(5000);
