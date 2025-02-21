@@ -4,11 +4,54 @@ const User = require("./db/user");
 const Spending = require("./db/spending.js")
 const SpendingMonthly = require("./db/monthly.js")
 const SpendingAnnually = require("./db/annually.js")
+const AWS = require('aws-sdk');
+const multer = require('multer');
+
 const app = express();
 const cors = require("cors")
 
 app.use(express.json())
 app.use(cors())
+
+AWS.config.update({
+    accessKeyId: 'AKIA54WIGGMTRRWE7PTF',
+    secretAccessKey: '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',
+    region: 'us-east-2'
+})
+
+const s3 = new AWS.S3()
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
+
+const uploadToS3 = (file) => {
+    const params = {
+        Bucket: 'financetrackerprofileimages', 
+        Key: `${Date.now()}-${file.originalname}`,
+        Body: file.buffer,
+        ContentType: file.mimetype
+    }
+    return s3.upload(params).promise()
+}
+
+
+app.put('/upload/:id', upload.single('image'), async (req, res) => {
+    if (!req.file) {
+        return res.send('No file uploaded')
+    }
+
+    const uploadResult = await uploadToS3(req.file)
+    const picurl = uploadResult.Location
+    let result = await User.updateOne({_id:req.params.id},{
+        $set:{picurl}
+    })
+
+
+    res.send({
+        message: 'Image uploaded successfully',
+        imageUrl: picurl
+    })
+})
+
 
 app.post("/signup", async (req,rsp)=>{
     let user = new User(req.body)
