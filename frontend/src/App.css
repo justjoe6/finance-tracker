@@ -1,0 +1,377 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.nav {
+  background-color: #407915;
+  height:75px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 15px;
+  padding-right: 15px;
+  color:white;
+  font-family: Georgia, serif;
+}
+
+.nav-right{
+  display: flex;
+  margin-left: auto;
+  flex-direction: row;
+  align-items: center;
+  font-size: 20px;
+}
+
+.nav-right p{
+  margin-left: 5px;
+  margin-right: 5px;
+  padding:3px;
+  cursor: pointer;
+}
+
+.navLinks {
+  color:white;
+  text-decoration: none;
+}
+
+.signup-container{
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  align-items: center;
+  height: calc(100vh - 75px);
+  background-color: #F8F8F8;
+}
+
+.signup-form{
+  padding-top:110px;
+  display: flex;
+  flex-direction: column;
+  width:350px;
+}
+
+.signup-btn{
+  margin-left:auto;
+  background-color: #407915;
+  color: white;
+  cursor:pointer;
+  padding:10px;
+  font-size: 16px;
+  font-family: Georgia, serif;
+  border-radius: 10px;
+}
+
+.input-box{
+  margin-bottom:22px;
+  height:30px;
+  font-size: 16px;
+  font-family: Georgia, serif;
+}
+
+.input-box-error-msg{
+  color:red;
+  margin-top:-20px;
+  margin-left:5px;
+  margin-right:auto;
+}
+
+.login-form{
+  padding-top:110px;
+  display: flex;
+  flex-direction: column;
+  width:350px;
+}
+
+.login-container{
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  align-items: center;
+  height: calc(100vh - 75px);
+  background-color: #F8F8F8;
+}
+
+.login-btn{
+  margin-left:auto;
+  background-color: #407915;
+  color: white;
+  cursor:pointer;
+  padding:10px;
+  font-size: 16px;
+  font-family: Georgia, serif;
+  border-radius: 10px;
+}
+
+
+.home-container{
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 75px);
+  background-color: #F8F8F8;
+}
+
+.finance-container{
+  display: flex;
+  flex-direction: column;
+  width:500px;
+  height:500px;
+  background-color: red;
+}
+
+.finance-header{
+  height:13%;
+  width:100%;
+  background-color: #B0B0B0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.finance-body{
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  height:74%;
+  max-height: 74%;
+  overflow-y: auto;
+  background-color: #D9D9D9;
+}
+.finance-date{
+  color:white;
+  font-family: Georgia, serif;
+}
+.finance-footer{
+  width:100%;
+  height:13%;
+  background-color: #B0B0B0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.finance-btn{
+  background-color: #D0CFCF;
+  color: white;
+  border: 0px;
+  border-radius: 26px;
+  height:28px;
+  width:37px;
+  font-size: 26px;
+  cursor: pointer; 
+}
+
+.finance-spend{
+  margin-left:auto;
+  margin-right:20px;
+  color: white;
+  font-family: Georgia, serif; 
+}
+
+.finance-add-btn{
+  background-color: #D0CFCF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor:pointer;
+  height:30px;
+  margin-left:10px;
+  align-items: center;
+  justify-content: center;
+  padding:10px;
+  font-size: 22px;
+  font-family: Georgia, serif;
+  border-radius: 10px;
+  border:0px;
+}
+
+.add-spend-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width:100%;
+  height: calc(100vh - 75px);
+  background-color: #F8F8F8;
+}
+
+.add-spend-btn{
+  margin-left:auto;
+  background-color: #407915;
+  color: white;
+  cursor:pointer;
+  padding:10px;
+  font-size: 16px;
+  font-family: Georgia, serif;
+  border-radius: 10px;
+}
+
+.add-spend-form{
+  display: flex;
+  flex-direction: column;
+  margin-top:120px;
+  width:350px;
+}
+
+.add-spend-selects-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom:20px;
+}
+
+.select-box{
+  width:80px;
+  height:30px;
+  background-color: #DBDBDB;
+}
+
+.finance-spendings{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  font-family: Georgia, serif;
+  font-size:22px;
+  padding-left:30px;
+  padding-right:30px;
+  height:50px;
+}
+.profile-container{
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  align-items: center;
+  height: fit-content;
+  background-color: #F8F8F8;
+  padding-bottom:20px;
+}
+
+.profile-pic{
+  border: 2px black solid;
+  width:230px;
+  height:230px;
+  border-radius: 200px;
+}
+
+.profile-img{
+  width:300px;
+  height:300px;
+  border-radius: 200px;
+}
+
+.delete-finance-btn{
+  border:0px;
+  color:red;
+  background-color:rgba(255, 255, 255, 0);
+  cursor: pointer;
+}
+
+.profile-clickable{
+  text-decoration: underline;
+  color: blue;
+  cursor: pointer;
+}
+
+.monthly-spend-container{
+  background-color: #D9D9D9;
+  height:40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left:20px;
+  padding-right:20px;
+  width:30%;
+  border: 2px black solid;
+}
+
+.remove-monthly-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width:100%;
+  height: calc(100vh - 75px);
+  background-color: #F8F8F8;
+}
+
+.annual-spend-container{
+  background-color: #D9D9D9;
+  height:40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left:20px;
+  padding-right:20px;
+  width:30%;
+  border: 2px black solid;
+}
+
+.remove-annual-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width:100%;
+  height: calc(100vh - 75px);
+  background-color: #F8F8F8;
+}
+
+.update-info-txt{
+  color:blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.update-pic-btn{
+  background-color: #407915;
+  color: white;
+  cursor:pointer;
+  padding:7px;
+  font-size: 16px;
+  font-family: Georgia, serif;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+.profile-update-form{
+  display: flex;
+  flex-direction: column;
+  width:350px;
+  margin-top:15px;
+}
+
+.profile-update-btn{
+  width:80px;
+  background-color:#407915;
+  color:white;
+  font-family: Georgia, serif;
+  cursor: pointer;
+
+}
+
+.update-box-error-msg{
+  color: red;
+  margin-top:0px;
+  margin-right:auto;
+}
+
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
