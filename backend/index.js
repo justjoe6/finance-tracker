@@ -6,6 +6,8 @@ const SpendingMonthly = require("./db/monthly.js")
 const SpendingAnnually = require("./db/annually.js")
 const AWS = require('aws-sdk');
 const multer = require('multer');
+const keyID = process.env.KEYID
+const secAcc = process.env.SECACC
 
 const app = express();
 const cors = require("cors")
@@ -14,8 +16,8 @@ app.use(express.json())
 app.use(cors())
 
 AWS.config.update({
-    accessKeyId: 'AKIA54WIGGMTRRWE7PTF',
-    secretAccessKey: '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',
+    accessKeyId: keyID,
+    secretAccessKey: secAcc,
     region: 'us-east-2'
 })
 
