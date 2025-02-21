@@ -1,17 +1,17 @@
 import {React,useState,useEffect} from "react";
 import { Link } from 'react-router-dom';
-import january from './img/january.jpg';
-import february from './img/february.jpg';
-import december from './img/december.jpg';
-import march from './img/march.jpg';
-import november from './img/november.jpg';
-import october from './img/october.jpg';
-import september from './img/september.jpg';
-import august from './img/august.jpg';
-import july from './img/july.jpg';
-import june from './img/june.jpg';
-import april from './img/april.jpg';
-import may from './img/may.jpg';
+import january from '../img/january.jpg';
+import february from '../img/february.jpg';
+import december from '../img/december.jpg';
+import march from '../img/march.jpg';
+import november from '../img/november.jpg';
+import october from '../img/october.jpg';
+import september from '../img/september.jpg';
+import august from '../img/august.jpg';
+import july from '../img/july.jpg';
+import june from '../img/june.jpg';
+import april from '../img/april.jpg';
+import may from '../img/may.jpg';
 
 const Home = () =>{
     const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
@@ -23,8 +23,7 @@ const Home = () =>{
     const [finances,setFinances]=useState([])
     const [netSpend,setNetSpend]=useState(0)
     const [img,setImg]=useState("")
-
-
+    const [images,setImages]=useState([])
 
     const retrieveMonthly = async () => {
         const userId = JSON.parse(localStorage.getItem("user"))._id
@@ -60,23 +59,11 @@ const Home = () =>{
         setFinances(totalSpendings)
         setNetSpend(newNetSpend)
     }  
-    const monthImages = {
-        0: january,
-        1: february,
-        2: march,
-        3: april,
-        4: may,
-        5: june,
-        6: july,
-        7: august,
-        8: september,
-        9: october,
-        10: november,
-        11: december
-    };
+
+    const monthImages = [january,february,march,april,may,june,july,august,september,october,november,december]
     useEffect(()=>{
+        setImages(monthImages)
         fetchData()
-        setImg(monthImages[month])
     },[month])
 
     const addMonth = ()=>{
@@ -126,8 +113,11 @@ const Home = () =>{
 
     let index=0
     return (
-    <div className="home-container" style={{backgroundImage: `url(${img})`,backgroundSize: "cover",backgroundPosition: "center",backgroundRepeat: "no-repeat"}}>
-        <div className="finance-container">
+    <div className="home-container">
+        {images.map((image,i)=>{
+            return (<div key={image}  className={`background-img ${month === i ? "visible" : ""}`} style={{backgroundImage: `url(${image})`}}></div>)
+        })}
+        <div className="finance-container" style={{ position: "relative", zIndex: 1 }}>
             <div className="finance-header">
                 {year > 1880 ? <button className="finance-btn" onClick={subMonth}>&lt;</button>:<p style={{marginLeft:"24px"}}></p>}
             <h2 className="finance-date">{months[month]} {year} Finances</h2>
@@ -137,7 +127,7 @@ const Home = () =>{
             {finances.map((finance)=>{
                 index+=1 
                 let fontColor = finance.type==="loss" ? "red" : "green"
-                let bgColor = index % 2 ===0 ? "#D9D9D9" : "#EFE9E9"
+                let bgColor = index % 2 ===0 ? "rgb(217, 217, 217)" : "rgb(239, 233, 233)"
                 return (<div className="finance-spendings" style={{color:fontColor,backgroundColor:bgColor}} key={finance}><p><button onClick={()=>deleteFinance(finance)} className="delete-finance-btn">X</button>{finance.title.toUpperCase()}</p><p>${finance.amount}</p></div>)})}
             </div>
             <div className="finance-footer">
