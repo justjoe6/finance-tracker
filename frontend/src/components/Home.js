@@ -1,5 +1,17 @@
 import {React,useState,useEffect} from "react";
 import { Link } from 'react-router-dom';
+import january from './img/january.jpg';
+import february from './img/february.jpg';
+import december from './img/december.jpg';
+import march from './img/march.jpg';
+import november from './img/november.jpg';
+import october from './img/october.jpg';
+import september from './img/september.jpg';
+import august from './img/august.jpg';
+import july from './img/july.jpg';
+import june from './img/june.jpg';
+import april from './img/april.jpg';
+import may from './img/may.jpg';
 
 const Home = () =>{
     const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
@@ -10,6 +22,8 @@ const Home = () =>{
     const [month,setMonth]=useState(presentMonth)
     const [finances,setFinances]=useState([])
     const [netSpend,setNetSpend]=useState(0)
+    const [img,setImg]=useState("")
+
 
 
     const retrieveMonthly = async () => {
@@ -46,8 +60,23 @@ const Home = () =>{
         setFinances(totalSpendings)
         setNetSpend(newNetSpend)
     }  
+    const monthImages = {
+        0: january,
+        1: february,
+        2: march,
+        3: april,
+        4: may,
+        5: june,
+        6: july,
+        7: august,
+        8: september,
+        9: october,
+        10: november,
+        11: december
+    };
     useEffect(()=>{
         fetchData()
+        setImg(monthImages[month])
     },[month])
 
     const addMonth = ()=>{
@@ -97,7 +126,7 @@ const Home = () =>{
 
     let index=0
     return (
-    <div className="home-container">
+    <div className="home-container" style={{backgroundImage: `url(${img})`,backgroundSize: "cover",backgroundPosition: "center",backgroundRepeat: "no-repeat"}}>
         <div className="finance-container">
             <div className="finance-header">
                 {year > 1880 ? <button className="finance-btn" onClick={subMonth}>&lt;</button>:<p style={{marginLeft:"24px"}}></p>}
