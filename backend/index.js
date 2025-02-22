@@ -35,10 +35,25 @@ const uploadToS3 = (file) => {
     return s3.upload(params).promise()
 }
 
+app.delete("/user/:id", async (req,rsp)=>{
+    let id = req.params.id
+    try{
+        let spendResult = await Spending.deleteMany({userId:id})
+        let monthResult = await SpendingMonthly.deleteMany({userId:id})
+        let annualResult = await SpendingAnnually.deleteMany({userId:id})
+        let userResult = await User.deleteOne({_id:id})
+        rsp.send({spendResult,monthResult,annualResult,userResult,success:true})
+    }catch(err){
+        rsp.send({msg:"Unable to process request",success:false})
+    }
 
-app.put('/upload/:id', upload.single('image'), async (req, res) => {
+    
+})
+
+
+app.put("/upload/:id", upload.single("image"), async (req,res)=>{
     if (!req.file) {
-        return res.send('No file uploaded')
+        return res.send("No file uploaded")
     }
 
     const uploadResult = await uploadToS3(req.file)
@@ -49,7 +64,7 @@ app.put('/upload/:id', upload.single('image'), async (req, res) => {
 
 
     res.send({
-        message: 'Image uploaded successfully',
+        message: "Image uploaded successfully",
         imageUrl: picurl
     })
 })

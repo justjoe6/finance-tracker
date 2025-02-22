@@ -9,6 +9,7 @@ import RemoveMonthly from './components/RemoveMonthly';
 import RemoveAnnual from './components/RemoveAnnual';
 import UpdateProfile from './components/UpdateProfile';
 import PrivateComponent from './components/PrivateComponent';
+import DeleteAccount from './components/DeleteAccount';
 import {BrowserRouter,Routes,Route} from 'react-router-dom';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
               <Route path="/removemonth" element={<RemoveMonthly/>}/>
               <Route path="/removeannual" element={<RemoveAnnual/>}/>
               <Route path="/updateprofile" element={<UpdateProfile/>}/>
+              <Route path="/deleteAccount" element={<DeleteAccount/>}/>
             </Route>
           </Routes>
         </BrowserRouter>
