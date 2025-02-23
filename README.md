@@ -371,6 +371,7 @@ The signup component contains a form requiring the user to enter a username, ema
 ```
 
 ## Home Component:
+The Home component displays all spendings for the currently displayed month taking into consideration one time spendings, monthly spendings, and annual spendings through API calls to retrieve these spendings which occurs when the component first loads. Also the net spend for the current month is also calculated during this step and later displayed for the user to see below the list of all spendings. The user also has the options to go back a month or forward a month with the arrows above the list of spendings. However, if the current month displayed is the actual current month the user does not have the option to go forward a month and the arrow to do so is removed. When a user clicks one of the buttons the process mentioned above is repeated, but for the month now currently displayed all spendings for that month are retrieved. Also the background image for every month is different so when a user changes months the background image also changes. The user also has the option to remove a spending for the month currently displayed and depending on the spending frequency(one time,monthly, and annual) a corresponding API call is made to remove it for that month and fetchData is called again to retrieve the updated spendings for the current month.
 ```
  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
     const today = new Date()
