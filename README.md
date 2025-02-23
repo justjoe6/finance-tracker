@@ -2,6 +2,7 @@
 https://www.figma.com/design/852HmYOgybVXcCWcnNcvCG/Finance-Tracker-Site-Design?node-id=1669-162202&t=kHg7B4S7Ra7O8Piq-1
 
 # Backend
+
 Signup and login APIs:
 Here it handles signing up and logging in users when the signup API is called it creates a new intance of the User model using whats in the request body(Username,password,and email). It's then saved on the database and the resulting document is converted into an object, the password is removed from the object and its sent back to the client. When a user attempts to login the corresponding API is called which using the information in the request body(Email and password) finds the matching user on the database and resturns the corresponding document if a match is found. If no match is found then it responds with the result "No User Found" otherwise it responds with an object containing all the users information minus the password.
 ```
@@ -23,6 +24,7 @@ app.post("/login",async (req,rsp)=>{
     rsp.send(user)
 })
 ```
+
 Add spending API:
 Here are the APIs for adding one time, monthly, and annual spending each uses the information in the request body(userId,month,year,title,amount,type,frequency) creates the corresponding model instance and saves them in the database.
 ```
@@ -66,6 +68,46 @@ app.delete("/deletespending/:id",async (req,rsp)=>{
 })
 ```
 
+Monthly and annual one time removal APIs:
+The monthly one time removal API updates the document with the corresponding document ID which is provided in the parameters by adding the month and year which are also provided in the parameters to the removed list of the document so that it is not retrieved for that month and year. The same is done with the annual one time removal, but only the year is taken into consideration and added to the removed list. Then the result is returned to the client in each case.
+
+```
+app.put("/updatemonthly/:id/:month/:year",async (req,rsp)=>{
+    let result = await SpendingMonthly.updateOne({_id:req.params.id},{
+        $push:{removed:[[req.params.month,req.params.year]]}
+    })
+    rsp.send(result)
+})
+app.put("/updateannual/:id/:year",async (req,rsp)=>{
+    let result = await SpendingAnnually.updateOne({_id:req.params.id},{
+        $push:{removed:[req.params.year]}
+    })
+    rsp.send(result)
+})
+```
+
+Permanently remove monthly spending and annual spending APIs:
+Here the APIs use the document ID provided in the parameters to update the corresponding document by setting the permaRemoveYear to the year provided in the parameters and if applicable permaRemoveMonth to the month provided in the parameters.
+```
+app.put("/deletesmonthlypending/:id/:month/:year",async (req,rsp)=>{
+    let id = req.params.id
+    let permaRemoveMonth = parseInt(req.params.month)
+    let permaRemoveYear = parseInt(req.params.year)
+    let result = await SpendingMonthly.updateOne({_id:id},{
+        $set:{permaRemoveMonth,permaRemoveYear}
+    })
+    rsp.send(result)
+})
+app.put("/deleteannualspending/:id/:year",async (req,rsp)=>{
+    let id = req.params.id
+    let permaRemoveYear = parseInt(req.params.year)
+    let result = await SpendingAnnually.updateOne({_id:id},{
+        $set : {permaRemoveYear}
+    })
+    rsp.send(result)
+})
+```
+
 Monthly and annual spending retrieval APIs:
 For the monthly spending retrieval API it searches the database for monthly spendings associated with the userId passed in through the parameters only if it has not been removed for that month and year. Since the app allows a user to remove a monthly spending for specific months while not removing it entirely this provides a means for that. The result is then filtered again to ensure that 1. the month and year provided in the parameters is after or the same month the monthly spending was added and 2. the month and year provided in the parameters was before the monthly spending was permanently removed(If it was removed). The same is done for the annual spending retrieval API, but just the year is taken into consideration instead of month and year.
 ```
@@ -101,41 +143,8 @@ app.get("/annualspendings/:id", async (req,rsp)=>{
 })
 ```
 
-```
-app.put("/updatemonthly/:id/:month/:year",async (req,rsp)=>{
-    let result = await SpendingMonthly.updateOne({_id:req.params.id},{
-        $push:{removed:[[req.params.month,req.params.year]]}
-    })
-    rsp.send(result)
-})
-app.put("/updateannual/:id/:year",async (req,rsp)=>{
-    let result = await SpendingAnnually.updateOne({_id:req.params.id},{
-        $push:{removed:[req.params.year]}
-    })
-    rsp.send(result)
-})
-```
-
-```
-app.put("/deletesmonthlypending/:id/:month/:year",async (req,rsp)=>{
-    let id = req.params.id
-    let permaRemoveMonth = parseInt(req.params.month)
-    let permaRemoveYear = parseInt(req.params.year)
-    let result = await SpendingMonthly.updateOne({_id:id},{
-        $set:{permaRemoveMonth,permaRemoveYear}
-    })
-    rsp.send(result)
-})
-app.put("/deleteannualspending/:id/:year",async (req,rsp)=>{
-    let id = req.params.id
-    let permaRemoveYear = parseInt(req.params.year)
-    let result = await SpendingAnnually.updateOne({_id:id},{
-        $set : {permaRemoveYear}
-    })
-    rsp.send(result)
-})
-```
-
+Update password and username APIs:
+Both APIs use the User Id provided in the parameter to find the corresponding user document and updates the password or username with the new version provided in the request body.
 ```
 app.put("/updatepassword/:id",async (req,rsp)=>{
     let result = await User.updateOne({_id:req.params.id},{
