@@ -644,7 +644,7 @@ const [annual,setAnnual] = useState([])
 ```
 
 ## Profile and Update Profile Component:
-The Profile component retrieves the profile picture url or the user if it exists and will use the url to display the image if not it will display an empty circle.
+The Profile component retrieves the profile picture url or the user if it exists and will use the url to display the image if not it will display an empty circle. In the UpdateProfile component it displays the users profile pic if applicable and below that a green button labeled "Update picture" which when pressed will then display an input to upload an image and a submit button for when the image is uploaded. When the submit button is pressed an API call is made to the backend containing the image file so that it can be stored in AWS S3 and the corresponding url is returned. That url is then added to the user object in local storage. Another part of the UpdateProfile component is the option to update a password when pressed it makes a form appear requiring the user to input their password, then re-enter it, and then input their new password. If any field is empty or the password and re-entered password do not match when submitted red error text will appear below the corresponding input. Then an API call is made to ensure the password matches the password of the current account if not red error text will appear stating "Does not match current password". If the password does match then an API call is made to update the users password on the database and then the page is refreshed. Lastly the user also has the option to change their username by clicking on the blue text reading "Update username". When pressed an input appears requiring the user to enter their new username and when the submit button is pressed and a username has indeed been entered an API call is made in order to update the users username in the database. Then the local storage is also updated with the new username.
 ```
     //Profile Component
     const username = JSON.parse(localStorage.getItem("user")).username
@@ -780,6 +780,7 @@ The Profile component retrieves the profile picture url or the user if it exists
 ```
 
 ## Delete Account Component: 
+The DeleteAccount component displays a form requiring the user to enter and re-enter their password which works similar to how the update password works above showing red error text accordingly. If the passwords match and it is indeed the password of the current user then a call is made to the backend to delete all one time, monthly, and annual spendings of the user. Lastly, the user document is deleted from the database, the user object is deleted from local storage and then the user is navigated back to the login page.
 ```
     const navigate = useNavigate()
     const username = JSON.parse(localStorage.getItem("user")).username
