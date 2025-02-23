@@ -1,9 +1,57 @@
 # Figma
 https://www.figma.com/design/852HmYOgybVXcCWcnNcvCG/Finance-Tracker-Site-Design?node-id=1669-162202&t=kHg7B4S7Ra7O8Piq-1
 
+# Database(MongoDB)
+
+## Schema:
+```
+const userSchema = new mongoose.Schema({
+    username:String,
+    email:String,
+    password:String,
+    picurl:String
+})
+
+let spendingSchema = new mongoose.Schema({
+    userId:String,
+    month:Number,
+    year:Number,
+    title:String,
+    amount:Number,
+    type:String,
+    frequency:String
+})
+
+const monthSchema = new mongoose.Schema({
+    userId:String,
+    month:Number,
+    year:Number,
+    title:String,
+    amount:Number,
+    type:String,
+    frequency:String,
+    removed:{ type: [[String]], default: [] },
+    permaRemoveYear:{ type: Number, default: -1 },
+    permaRemoveMonth:{ type: Number, default: -1 }
+})
+
+const annualSchema = new mongoose.Schema({
+    userId:String,
+    month:Number,
+    year:Number,
+    title:String,
+    amount:Number,
+    type:String,
+    frequency:String,
+    removed:{ type: [String], default: [] },
+    permaRemoveYear:{ type: Number, default: -1 }
+})
+
+```
+
 # Backend(Node.js)
 
-Signup and login APIs:
+## Signup and login APIs:
 Here it handles signing up and logging in users when the signup API is called it creates a new intance of the User model using whats in the request body(Username,password,and email). It's then saved on the database and the resulting document is converted into an object, the password is removed from the object and its sent back to the client. When a user attempts to login the corresponding API is called which using the information in the request body(Email and password) finds the matching user on the database and resturns the corresponding document if a match is found. If no match is found then it responds with the result "No User Found" otherwise it responds with an object containing all the users information minus the password.
 ```
 app.post("/signup", async (req,rsp)=>{
@@ -25,7 +73,7 @@ app.post("/login",async (req,rsp)=>{
 })
 ```
 
-Add spending API:
+## Add spending API:
 Here are the APIs for adding one time, monthly, and annual spending each uses the information in the request body(userId,month,year,title,amount,type,frequency) creates the corresponding model instance and saves them in the database.
 ```
 app.post("/add-spend",async (req,rsp)=>{
@@ -48,7 +96,7 @@ app.post("/add-annually",async (req,rsp)=>{
 })
 ```
 
-Retrieve and delete one time spending APIs:
+## Retrieve and delete one time spending APIs:
 The API to retrieve one time spendings takes three parameters year, month, and userId. Using that information it returns all one time spendings from the month and year provided in the parameters related to the userId and returns those to the client. The API to delete a one time spending takes the document ID of the spending and deletes the document with the corresponding ID and responds to the client with the result.
 ```
 app.get("/spendings/:year/:month/:id", async (req,rsp)=>{
@@ -68,7 +116,7 @@ app.delete("/deletespending/:id",async (req,rsp)=>{
 })
 ```
 
-Monthly and annual one time removal APIs:
+## Monthly and annual one time removal APIs:
 The monthly one time removal API updates the document with the corresponding document ID which is provided in the parameters by adding the month and year which are also provided in the parameters to the removed list of the document so that it is not retrieved for that month and year. The same is done with the annual one time removal, but only the year is taken into consideration and added to the removed list. Then the result is returned to the client in each case.
 
 ```
@@ -86,7 +134,7 @@ app.put("/updateannual/:id/:year",async (req,rsp)=>{
 })
 ```
 
-Permanently remove monthly spending and annual spending APIs:
+## Permanently remove monthly spending and annual spending APIs:
 Here the APIs use the document ID provided in the parameters to update the corresponding document by setting the permaRemoveYear to the year provided in the parameters and if applicable permaRemoveMonth to the month provided in the parameters.
 ```
 app.put("/deletesmonthlypending/:id/:month/:year",async (req,rsp)=>{
@@ -108,7 +156,7 @@ app.put("/deleteannualspending/:id/:year",async (req,rsp)=>{
 })
 ```
 
-Monthly and annual spending retrieval APIs:
+## Monthly and annual spending retrieval APIs:
 For the monthly spending retrieval API it searches the database for monthly spendings associated with the userId passed in through the parameters only if it has not been removed for that month and year. Since the app allows a user to remove a monthly spending for specific months while not removing it entirely this provides a means for that. The result is then filtered again to ensure that 1. the month and year provided in the parameters is after or the same month the monthly spending was added and 2. the month and year provided in the parameters was before the monthly spending was permanently removed(If it was removed). The same is done for the annual spending retrieval API, but just the year is taken into consideration instead of month and year.
 ```
 app.get("/monthlyspendings/:id/:month/:year", async (req,rsp)=>{
@@ -130,7 +178,7 @@ app.get("/annualspendings/:id/:year", async (req,rsp)=>{
 })
 ```
 
-Full monthly and annual retrieval APIs:
+## Full monthly and annual retrieval APIs:
 The following APIs return all monthly and annual spendings that have not been permanently removed.
 ```
 app.get("/monthlyspendings/:id", async (req,rsp)=>{
@@ -143,7 +191,7 @@ app.get("/annualspendings/:id", async (req,rsp)=>{
 })
 ```
 
-Update password and username APIs:
+## Update password and username APIs:
 Both APIs use the User Id provided in the parameter to find the corresponding user document and updates the password or username with the new version provided in the request body.
 ```
 app.put("/updatepassword/:id",async (req,rsp)=>{
@@ -167,7 +215,7 @@ app.put("/updateusername/:id",async (req,rsp)=>{
     rsp.send({result:"Updated username"})
 })
 ```
-Profile picture upload API:
+## Profile picture upload API:
 First it configures the AWS SDK with the necessary credentials (accessKeyId, secretAccessKey) and the region (us-east-2) where the S3 bucket is located. Then an S3 service object (s3) using AWS SDK is created allowing interaction with the S3 bucket then Multer is configured to store uploaded files in memory and upload middleware is created for handling single file uploads. The actual API then retrieves the image file from the request and uploads it to the s3 bucket it then takes the url of where that image is stored and adds it to the User document to update their profile picture. Finally, it responds to the client with the message "Image uploaded successfully" and the url where the image is stored.
 ```
 AWS.config.update({
@@ -208,7 +256,7 @@ app.put("/upload/:id", upload.single("image"), async (req,res)=>{
     })
 })
 ```
-Delete account API:
+## Delete account API:
 This API uses the userId passed in through the parameters to delete all spendings(one time, monthly, and annual) along with the user document stored on the database.
 ```
 app.delete("/user/:id", async (req,rsp)=>{
@@ -229,7 +277,8 @@ app.delete("/user/:id", async (req,rsp)=>{
 
 # Frontend(React.js)
 
-Login Component:
+## Login Component:
+The login component consists of two input boxes one for the user to enter their email and one for their password. Then when the submit button is pressed he validateUser function is called which first ensures that an email and password has been inputted if not then an error message appears below the corresponding input box saying either "Enter email" or "Enter password". If an email and password has been provided then an API call is made to the backend containing the email and password to verify whether or not a corresponding User document exists in the database. If a user is not found then a red error text appears below the last input box reading "Invalid username or password" if a user is found then the user object is stringified and then stored in local storage under the key "user" and then the user is redirected to the homepage.
 ```
     const [email,setEmail]=useState("")
     const [password,setPassword]=useState("")
@@ -275,7 +324,8 @@ Login Component:
 
 ```
 
-Signup Component:
+## Signup Component:
+The signup component contains a form requiring the user to enter a username, email, password, and to re-enter the password. When the button labeled sign up is pressed the addUser functino is called which first ensures that the user entered all the required information and if not then red error text appears below the corresponding box similar to the login component above. However, there is an added error here which ensures that the user enters the correct password twice if not red error text appears below the last input box saying the passwords do not match. If everything has been entered and the passwords match then an API call is made to the backend containing the username, email, and password inputted by the user to create and save a User document on the backend with the necessary information. Then just like in the login component the user object is stringified and saved in local storage and the user is redirected to the homepage.
 ```
  const [username,setUsername]=useState("")
     const [email,setEmail]=useState("")
@@ -320,7 +370,7 @@ Signup Component:
     </div>)
 ```
 
-Home Component:
+## Home Component:
 ```
  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
     const today = new Date()
@@ -447,7 +497,8 @@ Home Component:
 }
 ```
 
-Add Spend Component:
+## Add Spend Component:
+The AddSpend component contains a form requiring a user to enter the title of their spending(Gas bill, work check, etc.), the amount, frequency(one time, monthly, annual), and the type(gain,loss). Like the components above when the submit button is pressed if any information is missing red error text will appear the corresponding input box/dropdown menu. Depending on the payment frequency a corresponding API call is made to the backend to either add the spending to the one time, monthly, or annual collection in the database. Finally the user is navigated back to the homepage.
 ```
  const [type,setType]=useState("")
     const [frequency,setFrequency]=useState("")
@@ -527,8 +578,10 @@ Add Spend Component:
     )
 ```
 
-Remove Monthly Component:
+## Remove Monthly Component & Remove Annual Component:
+The RemoveMonthly component shows all monthly spendings that have not been permanently removed throogh an API call to the backend which is called when the page first loads in the useEffect. Next to every spending is an "X" which the user may press to permamenently remove that spending when it is pressed deleteMonthly is called which makes an API call to the backend with the document ID of the spending and the subsequent month so that from that point forward that spending will no longer appear every month. Then retrieveMonthly is called again to retrieve all spendings that have not been removed since that has just been updated. The RemoveAnnual component works the same except it removes the annual payment for the subsequent year.
 ```
+//Remove Monthly Component
 const [monthly,setMonthly]=useState([])
     const retrieveMonthly = async () => {
         const userId = JSON.parse(localStorage.getItem("user"))._id
@@ -557,10 +610,8 @@ const [monthly,setMonthly]=useState([])
         </div>
     )
 }
-```
 
-Remove Annual Component:
-```
+//Remove Annual Component
 const [annual,setAnnual] = useState([])
     const retrieveAnnual = async () => {
         const userId = JSON.parse(localStorage.getItem("user"))._id
@@ -592,8 +643,10 @@ const [annual,setAnnual] = useState([])
 }
 ```
 
-Profile Component:
+## Profile and Update Profile Component:
+The Profile component retrieves the profile picture url or the user if it exists and will use the url to display the image if not it will display an empty circle.
 ```
+    //Profile Component
     const username = JSON.parse(localStorage.getItem("user")).username
     const [pfpUrl,setpfpUrl]=useState("")
     useEffect(()=>{
@@ -610,12 +663,9 @@ Profile Component:
             <Link to="/updateprofile"><p className="profile-clickable" style={{marginTop:"0px"}}>Update profile</p></Link>
         </div>
     )
-}
-```
 
-Update Profile Component:
-```
-  const [updatePassClicked,setUpdatePassClicked]=useState(false)
+    //Update Profile Component
+    const [updatePassClicked,setUpdatePassClicked]=useState(false)
     const [updateUserClicked,setUpdateUserClicked]=useState(false)
     const [currPassword,setCurrPassword]=useState("")
     const [newPassword,setNewPassword]=useState("")
@@ -729,7 +779,7 @@ Update Profile Component:
         </div>)
 ```
 
-Delete Account Component: 
+## Delete Account Component: 
 ```
     const navigate = useNavigate()
     const username = JSON.parse(localStorage.getItem("user")).username
