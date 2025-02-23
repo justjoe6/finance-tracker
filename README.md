@@ -167,7 +167,8 @@ app.put("/updateusername/:id",async (req,rsp)=>{
     rsp.send({result:"Updated username"})
 })
 ```
-
+Profile picture upload API:
+First it configures the AWS SDK with the necessary credentials (accessKeyId, secretAccessKey) and the region (us-east-2) where the S3 bucket is located. Then an S3 service object (s3) using AWS SDK is created allowing interaction with the S3 bucket then Multer is configured to store uploaded files in memory and upload middleware is created for handling single file uploads. The actual API then retrieves the image file from the request and uploads it to the s3 bucket it then takes the url of where that image is stored and adds it to the User document to update their profile picture. Finally, it responds to the client with the message "Image uploaded successfully" and the url where the image is stored.
 ```
 AWS.config.update({
     accessKeyId: keyID,
@@ -207,7 +208,8 @@ app.put("/upload/:id", upload.single("image"), async (req,res)=>{
     })
 })
 ```
-
+Delete account API:
+This API uses the userId passed in through the parameters to delete all spendings(one time, monthly, and annual) along with the user document stored on the database.
 ```
 app.delete("/user/:id", async (req,rsp)=>{
     let id = req.params.id
