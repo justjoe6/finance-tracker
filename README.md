@@ -278,6 +278,10 @@ app.delete("/user/:id", async (req,rsp)=>{
 # Frontend(React.js)
 
 ## Login Component:
+<img width="959" alt="login" src="https://github.com/user-attachments/assets/7c7d226c-8711-42c6-bc68-56b06948a044" />
+<img width="959" alt="login error1" src="https://github.com/user-attachments/assets/2359fcaa-817e-4441-9359-ae032fa3a84f" />
+<img width="959" alt="login error2" src="https://github.com/user-attachments/assets/9bee3856-42a5-4077-b8cd-d875acbb1e6a" />
+
 The login component consists of two input boxes one for the user to enter their email and one for their password. Then when the submit button is pressed he validateUser function is called which first ensures that an email and password has been inputted if not then an error message appears below the corresponding input box saying either "Enter email" or "Enter password". If an email and password has been provided then an API call is made to the backend containing the email and password to verify whether or not a corresponding User document exists in the database. If a user is not found then a red error text appears below the last input box reading "Invalid username or password" if a user is found then the user object is stringified and then stored in local storage under the key "user" and then the user is redirected to the homepage.
 ```
     const [email,setEmail]=useState("")
@@ -325,6 +329,10 @@ The login component consists of two input boxes one for the user to enter their 
 ```
 
 ## Signup Component:
+<img width="959" alt="singup" src="https://github.com/user-attachments/assets/7cde9362-ff26-4119-a0e6-b0c1096eb8d8" />
+<img width="959" alt="signup errors" src="https://github.com/user-attachments/assets/3881f580-18d4-43a5-ab77-d357e5ce1ec7" />
+<img width="959" alt="signup error2" src="https://github.com/user-attachments/assets/1c48d81f-43e6-461f-a53e-8d2b2ad7f47c" />
+
 The signup component contains a form requiring the user to enter a username, email, password, and to re-enter the password. When the button labeled sign up is pressed the addUser functino is called which first ensures that the user entered all the required information and if not then red error text appears below the corresponding box similar to the login component above. However, there is an added error here which ensures that the user enters the correct password twice if not red error text appears below the last input box saying the passwords do not match. If everything has been entered and the passwords match then an API call is made to the backend containing the username, email, and password inputted by the user to create and save a User document on the backend with the necessary information. Then just like in the login component the user object is stringified and saved in local storage and the user is redirected to the homepage.
 ```
  const [username,setUsername]=useState("")
@@ -371,6 +379,9 @@ The signup component contains a form requiring the user to enter a username, ema
 ```
 
 ## Home Component:
+<img width="959" alt="home" src="https://github.com/user-attachments/assets/5abb36fa-9c41-463f-926b-6e33a1322e05" />
+<img width="959" alt="home2" src="https://github.com/user-attachments/assets/bac2b173-5c3d-4b7f-8354-972e1f57e241" />
+
 The Home component displays all spendings for the currently displayed month taking into consideration one time spendings, monthly spendings, and annual spendings through API calls to retrieve these spendings which occurs when the component first loads. Also the net spend for the current month is also calculated during this step and later displayed for the user to see below the list of all spendings. The user also has the options to go back a month or forward a month with the arrows above the list of spendings. However, if the current month displayed is the actual current month the user does not have the option to go forward a month and the arrow to do so is removed. When a user clicks one of the buttons the process mentioned above is repeated, but for the month now currently displayed all spendings for that month are retrieved. Also the background image for every month is different so when a user changes months the background image also changes. The user also has the option to remove a spending for the month currently displayed and depending on the spending frequency(one time,monthly, and annual) a corresponding API call is made to remove it for that month and fetchData is called again to retrieve the updated spendings for the current month.
 ```
  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
@@ -499,6 +510,9 @@ The Home component displays all spendings for the currently displayed month taki
 ```
 
 ## Add Spend Component:
+<img width="959" alt="add spend" src="https://github.com/user-attachments/assets/f5d31673-e1b2-46b8-82b0-e7558aa12468" />
+<img width="957" alt="add spend errors" src="https://github.com/user-attachments/assets/3e13d351-4a25-4c3c-94f8-2d26f5c59fbc" />
+
 The AddSpend component contains a form requiring a user to enter the title of their spending(Gas bill, work check, etc.), the amount, frequency(one time, monthly, annual), and the type(gain,loss). Like the components above when the submit button is pressed if any information is missing red error text will appear the corresponding input box/dropdown menu. Depending on the payment frequency a corresponding API call is made to the backend to either add the spending to the one time, monthly, or annual collection in the database. Finally the user is navigated back to the homepage.
 ```
  const [type,setType]=useState("")
@@ -580,6 +594,10 @@ The AddSpend component contains a form requiring a user to enter the title of th
 ```
 
 ## Remove Monthly Component & Remove Annual Component:
+<img width="959" alt="remove monthly1" src="https://github.com/user-attachments/assets/75b4face-8b39-431b-afcf-bc4d36c68b96" />
+<img width="959" alt="remove monthly2" src="https://github.com/user-attachments/assets/5373f4d5-67ff-4078-9b41-a73ff823e23c" />
+<img width="959" alt="remove annual" src="https://github.com/user-attachments/assets/bf4f326c-4bfb-4008-848e-d887ffd40f54" />
+
 The RemoveMonthly component shows all monthly spendings that have not been permanently removed throogh an API call to the backend which is called when the page first loads in the useEffect. Next to every spending is an "X" which the user may press to permamenently remove that spending when it is pressed deleteMonthly is called which makes an API call to the backend with the document ID of the spending and the subsequent month so that from that point forward that spending will no longer appear every month. Then retrieveMonthly is called again to retrieve all spendings that have not been removed since that has just been updated. The RemoveAnnual component works the same except it removes the annual payment for the subsequent year.
 ```
 //Remove Monthly Component
@@ -645,6 +663,12 @@ const [annual,setAnnual] = useState([])
 ```
 
 ## Profile and Update Profile Component:
+<img width="958" alt="profile" src="https://github.com/user-attachments/assets/c294923a-cac6-494b-b65d-18def5549068" />
+<img width="959" alt="update profile" src="https://github.com/user-attachments/assets/1b11d952-f2c9-4d2c-8b8d-bc305f5e7256" />
+<img width="959" alt="update profile options clicked" src="https://github.com/user-attachments/assets/3c6d8729-1893-4bdf-b738-dacbb82e3f7d" />
+<img width="959" alt="update profile errors" src="https://github.com/user-attachments/assets/e9c96fd2-b8c5-4dd7-a3cd-6f0a28b76e9f" />
+<img width="959" alt="update profile pic" src="https://github.com/user-attachments/assets/5eca3617-5c54-406e-bb33-e766aeb3e351" />
+
 The Profile component retrieves the profile picture url or the user if it exists and will use the url to display the image if not it will display an empty circle. In the UpdateProfile component it displays the users profile pic if applicable and below that a green button labeled "Update picture" which when pressed will then display an input to upload an image and a submit button for when the image is uploaded. When the submit button is pressed an API call is made to the backend containing the image file so that it can be stored in AWS S3 and the corresponding url is returned. That url is then added to the user object in local storage. Another part of the UpdateProfile component is the option to update a password when pressed it makes a form appear requiring the user to input their password, then re-enter it, and then input their new password. If any field is empty or the password and re-entered password do not match when submitted red error text will appear below the corresponding input. Then an API call is made to ensure the password matches the password of the current account if not red error text will appear stating "Does not match current password". If the password does match then an API call is made to update the users password on the database and then the page is refreshed. Lastly the user also has the option to change their username by clicking on the blue text reading "Update username". When pressed an input appears requiring the user to enter their new username and when the submit button is pressed and a username has indeed been entered an API call is made in order to update the users username in the database. Then the local storage is also updated with the new username.
 ```
     //Profile Component
@@ -781,6 +805,10 @@ The Profile component retrieves the profile picture url or the user if it exists
 ```
 
 ## Delete Account Component: 
+<img width="959" alt="delete account" src="https://github.com/user-attachments/assets/cb7adbb3-0a98-4e61-8b13-1c9a9e50019d" />
+<img width="959" alt="delete error1" src="https://github.com/user-attachments/assets/d1257e6c-d45e-4dd5-b822-93d74fe740f6" />
+<img width="959" alt="delete error2" src="https://github.com/user-attachments/assets/efff9583-e7b8-4408-927c-8afff56f788d" />
+
 The DeleteAccount component displays a form requiring the user to enter and re-enter their password which works similar to how the update password works above showing red error text accordingly. If the passwords match and it is indeed the password of the current user then a call is made to the backend to delete all one time, monthly, and annual spendings of the user. Lastly, the user document is deleted from the database, the user object is deleted from local storage and then the user is navigated back to the login page.
 ```
     const navigate = useNavigate()
