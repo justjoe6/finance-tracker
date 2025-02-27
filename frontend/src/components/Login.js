@@ -29,7 +29,7 @@ const Login = () => {
         }
         localStorage.setItem("user",JSON.stringify(result))
         console.log(result)
-        navigate("/home")
+        navigate("/")
     }
     return (
         <div className="login-container">
