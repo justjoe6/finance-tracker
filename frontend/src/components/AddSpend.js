@@ -27,7 +27,7 @@ const AddSpend = () => {
             })
             result = await result.json()
             console.log(result)
-            navigate("/home")
+            navigate("/")
             return
         }
         if(frequency === "annually"){
@@ -38,7 +38,7 @@ const AddSpend = () => {
             })
             result = await result.json()
             console.log(result)
-            navigate("/home")
+            navigate("/")
             return
         }
         let result = await fetch(`http://localhost:5000/add-spend`,{
@@ -48,7 +48,7 @@ const AddSpend = () => {
         })
         result = await result.json()
         console.log(result)
-        navigate("/home")
+        navigate("/")
     }
 
     return (
