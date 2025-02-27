@@ -18,11 +18,11 @@ function App() {
         <BrowserRouter>
           <NavBar/>
           <Routes>
-            <Route path="/" element={<Login/>}/>
+            <Route path="/login" element={<Login/>}/>
             <Route path="/signup" element={<Signup/>}/>
             <Route element={<PrivateComponent/>}>
               <Route path="/profile" element={<Profile/>}/>
-              <Route path="/home" element={<Home/>}/>
+              <Route path="/" element={<Home/>}/>
               <Route path="/add/:month/:year" element={<AddSpend/>}/>
               <Route path="/removemonth" element={<RemoveMonthly/>}/>
               <Route path="/removeannual" element={<RemoveAnnual/>}/>
