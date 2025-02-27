@@ -8,6 +8,7 @@ const AWS = require('aws-sdk');
 const multer = require('multer');
 const keyID = process.env.KEYID
 const secAcc = process.env.SECACC
+const region = process.env.REGION
 
 const app = express();
 const cors = require("cors")
@@ -18,7 +19,7 @@ app.use(cors())
 AWS.config.update({
     accessKeyId: keyID,
     secretAccessKey: secAcc,
-    region: 'us-east-2'
+    region: region
 })
 
 const s3 = new AWS.S3()
