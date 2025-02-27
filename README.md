@@ -1,6 +1,24 @@
 # Figma
 https://www.figma.com/design/852HmYOgybVXcCWcnNcvCG/Finance-Tracker-Site-Design?node-id=1669-162202&t=kHg7B4S7Ra7O8Piq-1
 
+# Setup
+1. Open a command prompt and navigate to the folder where you want to place the code
+2. Run git clone https://github.com/justjoe6/finance-tracker.git
+3. Open the folder finance-tracker in VSCode
+4. Open a terminal and type cd frontend then enter
+5. Type npm install and press enter
+6. Type npm start press enter and wait for a window to pop up with "Finance Tracker" in the top left corner and the header "Login" below it in the center
+7. Now open another terminal and type cd backend then enter
+8. Type npm install and press enter again
+9. Within the backend folder create a .env file
+10. Go to this link https://aws.amazon.com/s3/ and set up an AWS account
+11. Search S3 using the search box at the top and click on the first option reading "S3" under the search box
+12. In the S3 dashboard click on the Create bucket button
+13. Choose a unique name for your bucket and configure your bucket settings
+14. Return to VSCode and in .env file add the following lines of code KEYID = {Your access key id for your bucket} SECACC={Your secret access key for your bucket} and REGION = {The region of your bucket}
+15. Now in the terminal used to navigate to the backend folder type npm start
+16. Then your all set to use the site
+
 # Database(MongoDB)
 
 ## Schema:
